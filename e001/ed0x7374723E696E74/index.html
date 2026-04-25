@@ -1,1 +1,356 @@
-<body>to be worked on</body>
+---
+layout: default
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.error_code }} — Prism Error Reference</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0d0d0f;
+      --bg-surface: #131316;
+      --bg-card:    #1a1a1f;
+      --border:     #2a2a32;
+      --border-dim: #1e1e25;
+      --text:       #e8e8ec;
+      --text-muted: #7a7a8a;
+      --text-dim:   #4a4a5a;
+      --accent:     #a78bfa;
+      --accent-dim: #1e1a2e;
+      --green:      #4ade80;
+      --green-dim:  #0f2018;
+      --red:        #f87171;
+      --red-dim:    #1f0f0f;
+      --yellow:     #fbbf24;
+      --yellow-dim: #1f1a0a;
+      --blue:       #60a5fa;
+      --blue-dim:   #0a1525;
+      --mono:       'JetBrains Mono', monospace;
+      --sans:       'Syne', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Layout ── */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-dim);
+    }
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-back::before {
+      content: '←';
+      font-size: 1rem;
+    }
+
+    /* ── Header ── */
+    .error-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .severity-badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 1.25rem;
+    }
+    .severity-H { background: var(--blue-dim);   color: var(--blue);   border: 1px solid #1a3050; }
+    .severity-W { background: var(--yellow-dim); color: var(--yellow); border: 1px solid #3a2e10; }
+    .severity-E { background: var(--red-dim);    color: var(--red);    border: 1px solid #3a1515; }
+    .severity-C { background: #1a0505;           color: #ff4444;       border: 1px solid #4a0a0a; }
+
+    .error-title {
+      font-family: var(--mono);
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .error-short {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .error-code-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .error-code-block .code-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .code-label {
+      color: var(--text-dim);
+      min-width: 60px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .code-value { color: var(--accent); }
+    .code-url   { color: var(--blue); }
+
+    .copy-btn {
+      align-self: flex-start;
+      margin-top: 6px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Sections ── */
+    .section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-dim);
+    }
+
+    .section-body {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    /* ── Code blocks ── */
+    .code-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+    .code-block-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-dim);
+      padding: 8px 1rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .code-block-header .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .code-block pre {
+      padding: 1.25rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      color: var(--text);
+    }
+
+    /* Simple syntax highlight */
+    .kw  { color: #c084fc; }   /* keywords */
+    .fn  { color: #60a5fa; }   /* function names */
+    .st  { color: #4ade80; }   /* strings */
+    .cm  { color: #4a4a5a; font-style: italic; } /* comments */
+    .er  { color: #f87171; }   /* errors */
+    .nm  { color: #fbbf24; }   /* numbers */
+    .tp  { color: #38bdf8; }   /* types */
+    .op  { color: #94a3b8; }   /* operators */
+
+    /* ── Notes box ── */
+    .notes-box {
+      background: var(--accent-dim);
+      border: 1px solid #2d2540;
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+    .notes-box p + p { margin-top: 0.5rem; }
+
+    /* ── Footer ── */
+    .page-footer {
+      margin-top: 5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-dim);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- Nav -->
+  <nav class="nav">
+    <span class="nav-logo">Prism<span>.</span>errors</span>
+    <a href="/errors" class="nav-back">error index</a>
+  </nav>
+
+  <!-- Header -->
+  <header class="error-header">
+
+    <!-- Severity badge — set page.severity to H, W, E, or C -->
+    <div class="severity-badge severity-{{ page.severity }}">
+      {% if page.severity == "H" %}Hint
+      {% elsif page.severity == "W" %}Warning
+      {% elsif page.severity == "E" %}Error
+      {% elsif page.severity == "C" %}Critical
+      {% endif %}
+    </div>
+
+    <h1 class="error-title">{{ page.error_code }}</h1>
+    <p class="error-short">{{ page.short_description }}</p>
+
+    <!-- Full error code + URL block -->
+    <div class="error-code-block">
+      <div class="code-line">
+        <span class="code-label">code</span>
+        <span class="code-value">{{ page.full_code }}</span>
+      </div>
+      <div class="code-line">
+        <span class="code-label">url</span>
+        <span class="code-url">https://prism-lang.github.io/errors/{{ page.url_path }}</span>
+      </div>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('{{ page.full_code }}')">
+        copy code
+      </button>
+    </div>
+
+  </header>
+
+  <!-- Description -->
+  <section class="section">
+    <div class="section-label">description</div>
+    <div class="section-body">
+      {{ page.description }}
+    </div>
+  </section>
+
+  <!-- Example (bad code) -->
+  <section class="section">
+    <div class="section-label">example</div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <span class="dot"></span>
+        example.prism — triggers {{ page.error_code }}
+      </div>
+      <pre>{{ page.example_bad }}</pre>
+    </div>
+  </section>
+
+  <!-- Fix (good code) -->
+  <section class="section">
+    <div class="section-label">fix</div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <span class="dot"></span>
+        example.prism — corrected
+      </div>
+      <pre>{{ page.example_fix }}</pre>
+    </div>
+  </section>
+
+  <!-- Notes -->
+  {% if page.notes %}
+  <section class="section">
+    <div class="section-label">notes</div>
+    <div class="notes-box">
+      {{ page.notes }}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    <span>Prism Language — Standard Error Reference v{{ page.spec_version | default: "0.1" }}</span>
+    <span>prism-lang.github.io</span>
+  </footer>
+
+</div>
+</body>
+</html>
