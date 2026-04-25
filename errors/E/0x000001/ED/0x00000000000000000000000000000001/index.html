@@ -230,7 +230,7 @@
 
   <nav class="nav">
     <span class="nav-logo">Prism<span>.</span>errors</span>
-    <a href="/errors" class="nav-back">error index</a>
+    <a href="https://prismlang-org.github.io/errors/index" class="nav-back">error index</a>
   </nav>
 
   <header style="margin-bottom: 2.5rem;">
@@ -240,15 +240,17 @@
     <div class="error-code-block">
       <div class="code-line">
         <span class="code-label">code</span>
-        <span class="code-value">E001/ED0x7374723E696E74</span>
+        <span class="code-value" id="error-code">E0x000001/ED0x00000000000000000000000000000001</span>
       </div>
       <div class="code-line">
         <span class="code-label">url</span>
-        <span class="code-url">https://prismlang-org.github.io/prism/errors/e001/ed0x7374723E696E74</span>
+        <span class="code-url">https://prismlang-org.github.io/errors/E/0x000001/ED/0x00000000000000000000000000000001</span>
       </div>
-      <button class="copy-btn" onclick="navigator.clipboard.writeText('E0x000001/ED0x00000000000000000000000000000001').then(() => this.textContent = 'copied!').catch(() => {})">
-        copy code
-      </button>
+      <button class="copy-btn" onclick="
+        navigator.clipboard.writeText(document.getElementById('error-code').textContent)
+          .then(() => { this.textContent = 'copied!'; setTimeout(() => this.textContent = 'copy code', 2000); })
+          .catch(() => {})
+      ">copy code</button>
     </div>
   </header>
 
@@ -259,7 +261,8 @@
       and the compiler cannot safely coerce it. If a safe coercion path exists — such as
       passing an <code style="font-family: var(--mono); font-size: 0.85em; color: var(--accent);">int</code>
       where a <code style="font-family: var(--mono); font-size: 0.85em; color: var(--accent);">float</code>
-      is expected — the compiler emits <code style="font-family: var(--mono); font-size: 0.85em; color: var(--accent);">W0x000001</code>
+      is expected — the compiler emits
+      <code style="font-family: var(--mono); font-size: 0.85em; color: var(--accent);">W0x000001</code>
       instead and coerces automatically. STD::E001 is only raised when coercion is genuinely unsafe or impossible.
     </div>
   </section>
@@ -303,8 +306,8 @@ add(10, 5); -- correct: both arguments are int</pre>
   </section>
 
   <footer class="page-footer">
-    <span>Prism Language — Standard Error Reference v0.1</span>
-    <span>prism-lang.github.io</span>
+    <span>Prism Language — Standard Error Reference</span>
+    <span>prismlang-org.github.io</span>
   </footer>
 
 </div>
