@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- REPLACE: page title -->
+  <title>STD::EXXX — Prism Error Reference</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0d0d0f;
+      --bg-surface: #131316;
+      --bg-card:    #1a1a1f;
+      --border:     #2a2a32;
+      --border-dim: #1e1e25;
+      --text:       #e8e8ec;
+      --text-muted: #7a7a8a;
+      --text-dim:   #4a4a5a;
+      --accent:     #a78bfa;
+      --accent-dim: #1e1a2e;
+
+      /* Severity colours — keep all, badge class picks the right one */
+      --hint-fg:  #60a5fa; --hint-bg:  #0a1525; --hint-bd:  #1a3050;
+      --warn-fg:  #fbbf24; --warn-bg:  #1f1a0a; --warn-bd:  #3a2e10;
+      --err-fg:   #f87171; --err-bg:   #1f0f0f; --err-bd:   #3a1515;
+      --crit-fg:  #ff4444; --crit-bg:  #1a0505; --crit-bd:  #4a0a0a;
+
+      --blue: #60a5fa;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-dim);
+    }
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-back::before { content: '←'; font-size: 1rem; }
+
+    /* SEVERITY BADGE
+       Set class to one of: badge-H  badge-W  badge-E  badge-C */
+    .severity-badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 1.25rem;
+    }
+    .badge-H { background: var(--hint-bg); color: var(--hint-fg); border: 1px solid var(--hint-bd); }
+    .badge-W { background: var(--warn-bg); color: var(--warn-fg); border: 1px solid var(--warn-bd); }
+    .badge-E { background: var(--err-bg);  color: var(--err-fg);  border: 1px solid var(--err-bd);  }
+    .badge-C { background: var(--crit-bg); color: var(--crit-fg); border: 1px solid var(--crit-bd); }
+
+    .error-title {
+      font-family: var(--mono);
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .error-short {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .error-code-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .code-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .code-label {
+      color: var(--text-dim);
+      min-width: 60px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .code-value { color: var(--accent); }
+    .code-url   { color: var(--blue); }
+
+    .copy-btn {
+      align-self: flex-start;
+      margin-top: 6px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .section { margin-bottom: 2.5rem; }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-dim);
+    }
+
+    .section-body {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .code-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+    .code-block-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-dim);
+      padding: 8px 1rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .code-block-header .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .code-block pre {
+      padding: 1.25rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      color: var(--text);
+    }
+
+    .notes-box {
+      background: var(--accent-dim);
+      border: 1px solid #2d2540;
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    .page-footer {
+      margin-top: 5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-dim);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <nav class="nav">
+    <span class="nav-logo">Prism<span>.</span>errors</span>
+    <a href="https://prism-lang.github.io/errors" class="nav-back">error index</a>
+  </nav>
+
+  <header style="margin-bottom: 2.5rem;">
+
+    <!-- REPLACE: badge class (badge-H / badge-W / badge-E / badge-C) and label text -->
+    <div class="severity-badge badge-E">Error</div>
+
+    <!-- REPLACE: error code e.g. STD::E001 -->
+    <h1 class="error-title">STD::EXXX</h1>
+
+    <!-- REPLACE: one-line description -->
+    <p class="error-short">Short description here</p>
+
+    <div class="error-code-block">
+      <div class="code-line">
+        <span class="code-label">code</span>
+        <!-- REPLACE: full error code -->
+        <span class="code-value" id="error-code">E0xXXXXXX/ED0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
+      </div>
+      <div class="code-line">
+        <span class="code-label">url</span>
+        <!-- REPLACE: full URL path -->
+        <span class="code-url">https://prismlang-org.github.io/errors/E/0xXXXXXX/ED/0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
+      </div>
+      <button class="copy-btn" onclick="
+        navigator.clipboard.writeText(document.getElementById('error-code').textContent)
+          .then(() => { this.textContent = 'copied!'; setTimeout(() => this.textContent = 'copy code', 2000); })
+          .catch(() => {})
+      ">copy code</button>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section-label">description</div>
+    <!-- REPLACE: full description -->
+    <div class="section-body">
+      Description goes here.
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">example</div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <span class="dot"></span>
+        <!-- REPLACE: error code in header -->
+        example.prism — triggers STD::EXXX
+      </div>
+      <!-- REPLACE: bad code example. Use &lt; for < and &gt; for > -->
+      <pre>-- bad code here</pre>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">fix</div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <span class="dot"></span>
+        example.prism — corrected
+      </div>
+      <!-- REPLACE: fixed code example -->
+      <pre>-- fixed code here</pre>
+    </div>
+  </section>
+
+  <!-- OPTIONAL: remove this entire section if there are no notes -->
+  <section class="section">
+    <div class="section-label">notes</div>
+    <!-- REPLACE: notes content -->
+    <div class="notes-box">
+      Notes go here.
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <span>Prism Language — Standard Error Reference</span>
+    <span>prismlang-org.github.io</span>
+  </footer>
+
+</div>
+</body>
+</html>
