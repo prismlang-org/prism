@@ -1,13 +1,9 @@
----
-layout: default
----
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page.error_code }} — Prism Error Reference</title>
+  <title>STD::E001 — Prism Error Reference</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -24,14 +20,9 @@ layout: default
       --text-dim:   #4a4a5a;
       --accent:     #a78bfa;
       --accent-dim: #1e1a2e;
-      --green:      #4ade80;
-      --green-dim:  #0f2018;
       --red:        #f87171;
       --red-dim:    #1f0f0f;
-      --yellow:     #fbbf24;
-      --yellow-dim: #1f1a0a;
       --blue:       #60a5fa;
-      --blue-dim:   #0a1525;
       --mono:       'JetBrains Mono', monospace;
       --sans:       'Syne', sans-serif;
     }
@@ -48,14 +39,12 @@ layout: default
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* ── Layout ── */
     .page-wrap {
       max-width: 860px;
       margin: 0 auto;
       padding: 3rem 2rem 6rem;
     }
 
-    /* ── Nav ── */
     .nav {
       display: flex;
       align-items: center;
@@ -79,15 +68,7 @@ layout: default
       align-items: center;
       gap: 6px;
     }
-    .nav-back::before {
-      content: '←';
-      font-size: 1rem;
-    }
-
-    /* ── Header ── */
-    .error-header {
-      margin-bottom: 2.5rem;
-    }
+    .nav-back::before { content: '←'; font-size: 1rem; }
 
     .severity-badge {
       display: inline-block;
@@ -99,11 +80,10 @@ layout: default
       padding: 4px 12px;
       border-radius: 4px;
       margin-bottom: 1.25rem;
+      background: var(--red-dim);
+      color: var(--red);
+      border: 1px solid #3a1515;
     }
-    .severity-H { background: var(--blue-dim);   color: var(--blue);   border: 1px solid #1a3050; }
-    .severity-W { background: var(--yellow-dim); color: var(--yellow); border: 1px solid #3a2e10; }
-    .severity-E { background: var(--red-dim);    color: var(--red);    border: 1px solid #3a1515; }
-    .severity-C { background: #1a0505;           color: #ff4444;       border: 1px solid #4a0a0a; }
 
     .error-title {
       font-family: var(--mono);
@@ -132,7 +112,7 @@ layout: default
       flex-direction: column;
       gap: 6px;
     }
-    .error-code-block .code-line {
+    .code-line {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -162,10 +142,7 @@ layout: default
     }
     .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── Sections ── */
-    .section {
-      margin-bottom: 2.5rem;
-    }
+    .section { margin-bottom: 2.5rem; }
 
     .section-label {
       font-size: 0.72rem;
@@ -191,7 +168,6 @@ layout: default
       line-height: 1.8;
     }
 
-    /* ── Code blocks ── */
     .code-block {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -226,17 +202,6 @@ layout: default
       color: var(--text);
     }
 
-    /* Simple syntax highlight */
-    .kw  { color: #c084fc; }   /* keywords */
-    .fn  { color: #60a5fa; }   /* function names */
-    .st  { color: #4ade80; }   /* strings */
-    .cm  { color: #4a4a5a; font-style: italic; } /* comments */
-    .er  { color: #f87171; }   /* errors */
-    .nm  { color: #fbbf24; }   /* numbers */
-    .tp  { color: #38bdf8; }   /* types */
-    .op  { color: #94a3b8; }   /* operators */
-
-    /* ── Notes box ── */
     .notes-box {
       background: var(--accent-dim);
       border: 1px solid #2d2540;
@@ -247,9 +212,7 @@ layout: default
       color: var(--text-muted);
       line-height: 1.8;
     }
-    .notes-box p + p { margin-top: 0.5rem; }
 
-    /* ── Footer ── */
     .page-footer {
       margin-top: 5rem;
       padding-top: 1.5rem;
@@ -265,65 +228,57 @@ layout: default
 <body>
 <div class="page-wrap">
 
-  <!-- Nav -->
   <nav class="nav">
     <span class="nav-logo">Prism<span>.</span>errors</span>
     <a href="/errors" class="nav-back">error index</a>
   </nav>
 
-  <!-- Header -->
-  <header class="error-header">
-
-    <!-- Severity badge — set page.severity to H, W, E, or C -->
-    <div class="severity-badge severity-{{ page.severity }}">
-      {% if page.severity == "H" %}Hint
-      {% elsif page.severity == "W" %}Warning
-      {% elsif page.severity == "E" %}Error
-      {% elsif page.severity == "C" %}Critical
-      {% endif %}
-    </div>
-
-    <h1 class="error-title">{{ page.error_code }}</h1>
-    <p class="error-short">{{ page.short_description }}</p>
-
-    <!-- Full error code + URL block -->
+  <header style="margin-bottom: 2.5rem;">
+    <div class="severity-badge">Error</div>
+    <h1 class="error-title">STD::E001</h1>
+    <p class="error-short">Mismatched types</p>
     <div class="error-code-block">
       <div class="code-line">
         <span class="code-label">code</span>
-        <span class="code-value">{{ page.full_code }}</span>
+        <span class="code-value">E0x000001/ED0x00000000000000000000000000000001</span>
       </div>
       <div class="code-line">
         <span class="code-label">url</span>
-        <span class="code-url">https://prism-lang.github.io/errors/{{ page.url_path }}</span>
+        <span class="code-url">https://prism-lang.github.io/errors/E/0x000001/ED/0x00000000000000000000000000000001</span>
       </div>
-      <button class="copy-btn" onclick="navigator.clipboard.writeText('{{ page.full_code }}')">
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('E0x000001/ED0x00000000000000000000000000000001').then(() => this.textContent = 'copied!').catch(() => {})">
         copy code
       </button>
     </div>
-
   </header>
 
-  <!-- Description -->
   <section class="section">
     <div class="section-label">description</div>
     <div class="section-body">
-      {{ page.description }}
+      Raised when a value of one type is used where a different, incompatible type is expected
+      and the compiler cannot safely coerce it. If a safe coercion path exists — such as
+      passing an <code style="font-family: var(--mono); font-size: 0.85em; color: var(--accent);">int</code>
+      where a <code style="font-family: var(--mono); font-size: 0.85em; color: var(--accent);">float</code>
+      is expected — the compiler emits <code style="font-family: var(--mono); font-size: 0.85em; color: var(--accent);">W0x000001</code>
+      instead and coerces automatically. STD::E001 is only raised when coercion is genuinely unsafe or impossible.
     </div>
   </section>
 
-  <!-- Example (bad code) -->
   <section class="section">
     <div class="section-label">example</div>
     <div class="code-block">
       <div class="code-block-header">
         <span class="dot"></span>
-        example.prism — triggers {{ page.error_code }}
+        example.prism — triggers STD::E001
       </div>
-      <pre>{{ page.example_bad }}</pre>
+      <pre>fn add(a: int, b: int): int begin:
+    add::return &lt;&lt; a + b;
+end;
+
+add("hello", 5); -- STD::E001: str passed where int expected</pre>
     </div>
   </section>
 
-  <!-- Fix (good code) -->
   <section class="section">
     <div class="section-label">fix</div>
     <div class="code-block">
@@ -331,23 +286,24 @@ layout: default
         <span class="dot"></span>
         example.prism — corrected
       </div>
-      <pre>{{ page.example_fix }}</pre>
+      <pre>fn add(a: int, b: int): int begin:
+    add::return &lt;&lt; a + b;
+end;
+
+add(10, 5); -- correct: both arguments are int</pre>
     </div>
   </section>
 
-  <!-- Notes -->
-  {% if page.notes %}
   <section class="section">
     <div class="section-label">notes</div>
     <div class="notes-box">
-      {{ page.notes }}
+      If you intended to convert a value between types, use an explicit cast instead.
+      Note that not all casts are permitted — see STD::E002 for invalid cast errors.
     </div>
   </section>
-  {% endif %}
 
-  <!-- Footer -->
   <footer class="page-footer">
-    <span>Prism Language — Standard Error Reference v{{ page.spec_version | default: "0.1" }}</span>
+    <span>Prism Language — Standard Error Reference v0.1</span>
     <span>prism-lang.github.io</span>
   </footer>
 
